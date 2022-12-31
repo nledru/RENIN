@@ -20,13 +20,13 @@
 #' @export
 #'
 plot_motif_enrichment <- function(seurat,
-								  cres,
-								  motifs_to_label = NULL,
-								  num_top_label = 10,
-								  label_bottom = TRUE,
-								  num_bottom_label = 5,
-								  color = "#5862AD",
-								  flip = FALSE) {
+                                  cres,
+                                  motifs_to_label = NULL,
+                                  num_top_label = 10,
+                                  label_bottom = TRUE,
+                                  num_bottom_label = 5,
+                                  color = "#5862AD",
+                                  flip = FALSE) {
 	require(Seurat)
 	require(Signac)
 	require(ggplot2)
@@ -91,11 +91,11 @@ plot_motif_enrichment <- function(seurat,
 #' @export
 #'
 plot_footprinting <- function(object,
-							  assay.1,
-							  assay.2,
-							  features,
-							  group.by = NULL,
-							  idents = NULL, 
+                              assay.1,
+                              assay.2,
+                              features,
+                              group.by = NULL,
+                              idents = NULL,
                               label = TRUE,
                               repel = TRUE,
                               show.expected = TRUE,
@@ -288,12 +288,12 @@ plot_footprinting <- function(object,
 #' @export
 #'
 plot_graph_rankings <- function(tf_results,
-					   			regulator_tf_names,
-					   			seurat,
-					   			top_n_graph = 20, # >20 can be a little too cluttered, so split this out
-					   			top_n_ranking = 25,
-					   			layout_algorithm = "kk",
-					   			color = "#5862AD") {
+                                regulator_tf_names,
+                                seurat,
+                                top_n_graph = 20, # >20 can be a little too cluttered, so split this out
+                                top_n_ranking = 25,
+                                layout_algorithm = "kk",
+                                color = "#5862AD") {
 	require(Seurat)
 	require(igraph)
 	require(ggraph)
@@ -464,16 +464,16 @@ plot_tf_rankings <- function(results_df,
 #' @export
 #'
 simulate_dataset <- function(seurat,
-							 target_celltype = c(),
-							 end_celltype = c(), 
+                             target_celltype = c(),
+                             end_celltype = c(),
                              model = aen_model,
                              genes = rownames(aen_model),
-                             tfs = colnames(aen_model), 
+                             tfs = colnames(aen_model),
                              perturbed_tfs_up = c(),
                              perturbed_tfs_down = c(),
                              mean_var_df = mean_var,
                              how_much = c(1, 5, 10),
-                             num_starting_cells = 500, 
+                             num_starting_cells = 500,
                              set.seed = TRUE) {
     require(Seurat)
     require(tidyverse)
@@ -550,10 +550,10 @@ simulate_dataset <- function(seurat,
 #' @export
 #'
 perturb_cells <- function(cell,
-						  perturbed_tfs_up,
-						  perturbed_tfs_down,
-						  mean_var_df,
-						  how_much = 1) {
+                          perturbed_tfs_up,
+                          perturbed_tfs_down,
+                          mean_var_df,
+                          how_much = 1) {
     cell[perturbed_tfs_down] <- cell[perturbed_tfs_down] - (how_much * mean_var_df["sd", perturbed_tfs_down])
     cell[which(cell < 0)] <- 0
 
@@ -582,9 +582,9 @@ perturb_cells <- function(cell,
 #' @export
 #'
 simulate_cell <- function(cell, 
-						  model,
-						  genes,
-						  tfs) {
+                          model,
+                          genes,
+                          tfs) {
     cell_tfs <- cell[tfs]
     cell_tfs[1] <- 1
     cell[genes] <- model[genes, ] %*% cell_tfs

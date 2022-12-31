@@ -45,14 +45,14 @@ make_bootstrap_sequences <- function(num_bootstraps, gene_names) {
 #' @export
 #'
 prepare_degs <- function(seurat,
-						 ident.1,
-						 ident.2,
-						 group.by = NULL,
-						 min.pct = 0.1,
-						 assay = "SCT",
-						 slot = "data",
-						 p_val_cutoff = 0.05,
-						 peak_assay = "peaks", ...) {
+                         ident.1,
+                         ident.2,
+                         group.by = NULL,
+                         min.pct = 0.1,
+                         assay = "SCT",
+                         slot = "data",
+                         p_val_cutoff = 0.05,
+                         peak_assay = "peaks", ...) {
 	require(Seurat)
 	require(Signac)
 
@@ -93,15 +93,15 @@ prepare_degs <- function(seurat,
 #' @export
 #'
 prepare_pseudocell_matrix <- function(seurat,
-									  assay,
-									  slot = "data",
-									  cells_per_partition = 100,
-									  find_neighbors = FALSE,
-									  reduction1 = "harmony",
-									  reduction2 = "harmony_peaks",
-									  dim_list = list(1:50, 1:50),
-									  k.nn = 5,
-									  seed = 489284) {
+                                      assay,
+                                      slot = "data",
+                                      cells_per_partition = 100,
+                                      find_neighbors = FALSE,
+                                      reduction1 = "harmony",
+                                      reduction2 = "harmony_peaks",
+                                      dim_list = list(1:50, 1:50),
+                                      k.nn = 5,
+                                      seed = 489284) {
 	require(Seurat)
 	require(Signac)
 	require(tidyverse)
@@ -165,12 +165,12 @@ prepare_pseudocell_matrix <- function(seurat,
 #' @export
 #'
 apply_multi_micro_clustering <- function(seurat,
-		               				 	 cells_per_partition = 100,
-		               					 find_neighbors = FALSE,
-		               					 reduction1 = "harmony",
-		               					 reduction2 = "harmony_peaks",
-		               					 dim_list = list(1:50, 1:50),
-		               					 k.nn = 5) {
+                                         cells_per_partition = 100,
+                                         find_neighbors = FALSE,
+                                         reduction1 = "harmony",
+                                         reduction2 = "harmony_peaks",
+                                         dim_list = list(1:50, 1:50),
+                                         k.nn = 5) {
 	require(Seurat)
 	require(SeuratWrappers)
 	require(VISION)

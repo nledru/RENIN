@@ -37,23 +37,23 @@
 #' @export
 #'
 run_peak_aen <- function(seurat,
-						 pseudocell_mat,
-						 pseudocell_mat_peaks,
-						 gene_list,
-						 lambda2 = 0.5,
-						 gamma = 1,
-						 ci_cutoff = 1.96,
-						 pval_cutoff = NULL,
-						 set_nonsig_to_zero = TRUE,
-						 max_distance = 5e+05,
-						 train_fraction = 0.8,
-						 num_bootstraps = 1000,
-						 bootstrap = TRUE,
-						 num_threads = 16,
-						 globals_maxsize = NULL,
-						 verbose = TRUE,
-						 bs_seed = 943126,
-						 multi_seed = 6283408, ...) {
+                         pseudocell_mat,
+                         pseudocell_mat_peaks,
+                         gene_list,
+                         lambda2 = 0.5,
+                         gamma = 1,
+                         ci_cutoff = 1.96,
+                         pval_cutoff = NULL,
+                         set_nonsig_to_zero = TRUE,
+                         max_distance = 5e+05,
+                         train_fraction = 0.8,
+                         num_bootstraps = 1000,
+                         bootstrap = TRUE,
+                         num_threads = 16,
+                         globals_maxsize = NULL,
+                         verbose = TRUE,
+                         bs_seed = 943126,
+                         multi_seed = 6283408, ...) {
 	require(gcdnet)
 	require(future)
 	require(future.apply)
@@ -184,25 +184,25 @@ run_peak_aen <- function(seurat,
 #' @export
 #'
 run_tf_aen <- function(seurat,
-  					   pseudocell_mat,
- 					   aen_results_peaks = peak_results,
-					   gene_list = NULL,
-					   lambda2 = 0.5,
-					   gamma = 1,
-					   ci_cutoff = 1.96,
-					   pval_cutoff = NULL,
-					   set_nonsig_to_zero = TRUE,
-				 	   promoter_only = FALSE,
-					   promoter_threshold = 2000,
-					   train_fraction = 0.8,
-					   num_bootstraps = 100,
-					   bootstrap = TRUE,
-					   num_threads = 16,
-					   globals_maxsize = NULL,
-					   verbose = TRUE,
-					   bs_seed = 943126,
-					   peak_assay = "peaks",
-					   multi_seed = 6283408, ...) {
+                       pseudocell_mat,
+                       aen_results_peaks = peak_results,
+                       gene_list = NULL,
+                       lambda2 = 0.5,
+                       gamma = 1,
+                       ci_cutoff = 1.96,
+                       pval_cutoff = NULL,
+                       set_nonsig_to_zero = TRUE,
+                       promoter_only = FALSE,
+                       promoter_threshold = 2000,
+                       train_fraction = 0.8,
+                       num_bootstraps = 100,
+                       bootstrap = TRUE,
+                       num_threads = 16,
+                       globals_maxsize = NULL,
+                       verbose = TRUE,
+                       bs_seed = 943126,
+                       peak_assay = "peaks",
+                       multi_seed = 6283408, ...) {
 	require(Seurat)
 	require(Signac)
 	require(SeuratWrappers)
@@ -359,13 +359,13 @@ run_tf_aen <- function(seurat,
 #' @export
 #'
 rank_tfs <- function(tf_results,
-					 negative_genes = c(),
-					 regulator_tf_names = NULL,					 
-					 seurat,
-					 weight_by_expr = TRUE,
-					 expr_assay = "SCT",
-					 slot = "data",
-					 num_cores = 4) {
+                     seurat,
+                     negative_genes = c(),
+                     regulator_tf_names = NULL,					 
+                     weight_by_expr = TRUE,
+                     expr_assay = "SCT",
+                     slot = "data",
+                     num_cores = 4) {
 	require(Seurat)
 	require(parallel)
 	require(tidyverse)
@@ -434,7 +434,10 @@ rank_tfs <- function(tf_results,
 #' @return List of two rankings, one by betweenness and one by PageRank
 #' @export
 #'
-rank_tfs_by_centrality <- function(tf_results, seurat, assay = "SCT", slot = "data") {
+rank_tfs_by_centrality <- function(tf_results, 
+	                               seurat, 
+	                               assay = "SCT", 
+	                               slot = "data") {
 	require(igraph)
 	require(tidyverse)
 	require(Matrix)
@@ -504,7 +507,7 @@ rank_tfs_by_centrality <- function(tf_results, seurat, assay = "SCT", slot = "da
 #' @export
 #'
 run_aen_peaks_for_gene <- function(input_list,
-								   pseudocell_matrix,
+                                   pseudocell_matrix,
                             	   train_fraction = 0.8,
                             	   set_seed = TRUE,
                             	   lambda = "lambda.min",
