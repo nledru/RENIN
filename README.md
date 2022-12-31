@@ -16,4 +16,4 @@ Additional dependencies are listed in the DESCRIPTION file. RENIN is designed to
 
 ## Running RENIN
 
-For a brief introduction to running RENIN on a single cell dataset, see the vignette at [Running RENIN](https://nledru.github.io).
+For a brief introduction to running RENIN on a single cell dataset, see the vignette at [Getting started](https://nledru.github.io/RENIN/gettingstarted.html).
