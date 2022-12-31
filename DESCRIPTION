@@ -1,0 +1,34 @@
+Package: RENIN
+Title: Regulatory Network Inference with single cell multiomic data 
+Version: 1.0
+Authors@R: 
+    person("Nicolas", "Ledru", , "nicolas.ledru@wustl.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-9237-3634"))
+Description: RENIN predicts cis- and trans-regulatory elements for genes .
+License: MIT License
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports:
+    Seurat,
+    Signac,
+    SeuratWrappers,
+    BiocGenerics,
+    GenomicRanges,
+    chromVARmotifs,
+    BSgenome.Hsapiens.UCSC.hg38,
+    BSgenome,
+    VISION,
+    tidyverse,
+    stringr,
+    ggplot2,
+    ggrepel,
+    parallel,
+    future,
+    future.apply,
+    gcdnet,
+    igraph,
+    ggraph,
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
