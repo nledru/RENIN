@@ -517,15 +517,13 @@ run_aen_peaks_for_gene <- function(input_list,
     require(gcdnet)
 
     target_name <- input_list[[1]]
-    pseudocell_matrix <- input_list[[2]]
-    num_pseudo_cells <- dim(pseudocell_matrix)[1]
+    pseudocell_factor_expressions <- input_list[[2]]
+    num_pseudo_cells <- dim(pseudocell_factor_expressions)[1]
 
     bootstrap_seeds <- input_list[[3]]
     if (set_seed && !is.null(bootstrap_seeds)) { 
         set.seed(bootstrap_seeds[length(bootstrap_seeds)])
     }
-
-    pseudocell_factor_expressions <- pseudocell_matrix
 
     train_rows <- sample(nrow(pseudocell_matrix), train_fraction*nrow(pseudocell_matrix))
     x.train <- as.matrix(pseudocell_factor_expressions[train_rows, ])
