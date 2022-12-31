@@ -403,7 +403,7 @@ plot_tf_rankings <- function(results_df,
 							 two_tailed = TRUE,
 							 top_n_to_label = 5,
 							 label_tfs = TRUE,
-							 colors = c("5862AD", "#39B54A")) {
+							 colors = c("#5862AD", "#39B54A")) {
 	require(ggplot2)
 	require(ggrepel)
 
@@ -416,9 +416,11 @@ plot_tf_rankings <- function(results_df,
 		tfs_to_label <- c(rownames(head(results_df, n = top_n_to_label)),
 						  rownames(tail(results_df, n = top_n_to_label)))
 	}
+	
 	results_df$label <- rep("", dim(results_df)[1])
+
 	if (label_tfs) { 
-		results_df$label[which(results_df$tfname %in% tfs_to_label)] <-results_df$tfname[which(results_df$tfname %in% tfs_to_label)]
+		results_df$label[which(results_df$TF_name %in% tfs_to_label)] <- results_df$TF_name[which(results_df$TF_name %in% tfs_to_label)]
 	}
 
 	results_df$comp <- ifelse(results_df$Score > 0, "H", "FR")
@@ -431,7 +433,7 @@ plot_tf_rankings <- function(results_df,
 		    geom_bar(stat = "identity", color = "black", size = 0.0, width = 1, alpha = .8) + 
 		    scale_fill_manual(values = colors) +
 	    	theme_classic() + xlab("TF") + ylab("Predicted regulatory influence") +
-		    geom_text_repel(aes(label = label), size = 5) + 
+		    geom_text_repel(aes(label = label), max.overlaps = 100, size = 5) + 
 		    theme(text = element_text(size = 14), axis.text = element_text(size = 14))
 	return(g)
 }
