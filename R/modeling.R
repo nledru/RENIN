@@ -64,6 +64,16 @@ run_peak_aen <- function(seurat,
 	if (class(gene_list) == "list") {
 		gene_list <- unlist(gene_list)
 	}
+  
+  # remove genes that are not in the column names of pseudocell_mat
+  # such cases can happen when gene_list is provided separately and contains
+  # genes that are not the the expression matrix
+  if (sum(gene_list %in% colnames(pseudocell_mat)) != length(gene_list)){
+    print("The following genes were removed from gene_list because they do not exist in pseudocell_mat:")
+    print(gene_list[!gene_list %in% colnames(pseudocell_mat)])
+    gene_list = gene_list[gene_list %in% colnames(pseudocell_mat)]
+  }
+  
 
 	# prepare peak gene key
 	gene_coords <- Signac:::CollapseToLongestTranscript(Annotation(seurat))
