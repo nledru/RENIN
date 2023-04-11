@@ -440,7 +440,9 @@ plot_tf_rankings <- function(results_df,
 		    geom_bar(stat = "identity", color = "black", size = 0.0, width = 1, alpha = .8) + 
 		    scale_fill_manual(values = colors) +
 	    	theme_classic() + xlab("TF") + ylab("Predicted regulatory influence") +
-		    geom_text_repel(aes(label = label), max.overlaps = 100, size = 5) + 
+		    # geom_text_repel(aes(label = label), max.overlaps = 100, size = 5) + 
+	      geom_text_repel(aes(label = label), max.overlaps = 100, size = 5, force = 10, xlim = c(-Inf, Inf)) + 
+	      coord_cartesian(clip = "off") +   ## to allow labels exceed the x axis boundary in case multiple labels are mixed up 
 		    theme(text = element_text(size = 14), axis.text = element_text(size = 14))
 	return(g)
 }
