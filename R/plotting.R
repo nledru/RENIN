@@ -391,9 +391,9 @@ plot_graph_rankings <- function(tf_results,
 #' @param two_tailed Boolean whether P value cutoff is for a two-tailed test
 #' @param top_n_to_label Number of top positive and negative TFs to label on plot if tfs_to_label is NULL
 #' @param label_tfs Boolean whether to label TFs on plot
-#' @param colors A vector of two color values: color1 for negative and color2 for positive scores
-#' @param ident1 Label for negative scores, default FR
-#' @param ident2 Label for positive scores, default H
+#' @param colors A vector of two color values: color1 for positive and color2 for negative scores
+#' @param ident1 Label for positive scores, default FR
+#' @param ident2 Label for negative scores, default H
 #'
 #' @return ggplot of motif enrichment, fold enrichment vs -log(p-value)
 #' @export
@@ -405,8 +405,8 @@ plot_tf_rankings <- function(results_df,
 							 two_tailed = TRUE,
 							 top_n_to_label = 5,
 							 label_tfs = TRUE,
-							 colors = c("#5862AD", "#39B54A"), 
-							 ident1 = "FR", ident2 = "H") {
+							 colors = c("#39B54A", "#5862AD"), 
+							 ident1 = "H", ident2 = "FR") {
 	require(ggplot2)
 	require(ggrepel)
 
@@ -427,8 +427,8 @@ plot_tf_rankings <- function(results_df,
 	}
 
 	# allow change the legend label for ident1 and ident2. 
-	results_df$comp <- ifelse(results_df$Score > 0, ident2, ident1)
-	# fix the order of color with color 1 corresponding to ident 1, and color 2 corresponding to ident 2.
+	results_df$comp <- ifelse(results_df$Score > 0, ident1, ident2)
+	# freeze the order of color with color 1 corresponds to ident 1, and color 2 corresponds to ident 2.
 	results_df$comp = factor(results_df$comp, levels = c(ident1, ident2))
 	
 	if (length(which(results_df$Score < 0)) == 0) {
