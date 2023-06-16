@@ -231,12 +231,12 @@ run_tf_aen <- function(seurat,
 	}
 
 	###############
-  # allow user defined ATAC assay name
-  tmp_assay = seurat[[peak_assay]]
-  peak_tf_key <- tmp_assay@motifs@data
-  colnames(peak_tf_key) <- unlist(tmp_assay@motifs@motif.names)
+  	# allow user defined ATAC assay name
+  	tmp_assay = seurat[[peak_assay]]
+  	peak_tf_key <- tmp_assay@motifs@data
+  	colnames(peak_tf_key) <- unlist(tmp_assay@motifs@motif.names)
 
-  # peak_tf_key <- seurat@assays$peaks@motifs@data
+  	# peak_tf_key <- seurat@assays$peaks@motifs@data
 	# colnames(peak_tf_key) <- unlist(seurat@assays$peaks@motifs@motif.names)
   ###############
 
