@@ -230,8 +230,15 @@ run_tf_aen <- function(seurat,
 		modeled_genes <- gene_list
 	}
 
-	peak_tf_key <- seurat@assays$peaks@motifs@data
-	colnames(peak_tf_key) <- unlist(seurat@assays$peaks@motifs@motif.names)
+	###############
+  # allow user defined ATAC assay name
+  tmp_assay = seurat[[peak_assay]]
+  peak_tf_key <- tmp_assay@motifs@data
+  colnames(peak_tf_key) <- unlist(tmp_assay@motifs@motif.names)
+
+  # peak_tf_key <- seurat@assays$peaks@motifs@data
+	# colnames(peak_tf_key) <- unlist(seurat@assays$peaks@motifs@motif.names)
+  ###############
 
 	regulator_tf_names <- colnames(peak_tf_key)
 	regulator_tf_names <- regulator_tf_names[which(regulator_tf_names %in% colnames(pseudocell_mat))]

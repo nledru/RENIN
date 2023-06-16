@@ -179,6 +179,11 @@ apply_multi_micro_clustering <- function(seurat,
 	if (find_neighbors || is.null(seurat@neighbors$weighted.nn)) {
 		seurat <- FindMultiModalNeighbors(seurat, reduction.list = list(reduction1, reduction2),
 										  k.nn = k.nn, dims.list = dim_list)
+
+		###############
+	    # assume WNN.UMAP need to be generated
+	    seurat <- RunUMAP(seurat, nn.name = "weighted.nn", reduction.name = "WNN.UMAP", reduction.key = "wnnUMAP_")
+	    ###############
 	}
 	seurat.cds <- as.cell_data_set(seurat, assay = "SCT")
 	res <- reducedDim(seurat.cds, type = "WNN.UMAP", withDimnames = TRUE)
