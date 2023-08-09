@@ -64,6 +64,16 @@ run_peak_aen <- function(seurat,
 	if (class(gene_list) == "list") {
 		gene_list <- unlist(gene_list)
 	}
+  
+  # remove genes that are not in the column names of pseudocell_mat
+  # such cases can happen when gene_list is provided separately and contains
+  # genes that are not the the expression matrix
+  if (sum(gene_list %in% colnames(pseudocell_mat)) != length(gene_list)){
+    print("The following genes were removed from gene_list because they do not exist in pseudocell_mat:")
+    print(gene_list[!gene_list %in% colnames(pseudocell_mat)])
+    gene_list = gene_list[gene_list %in% colnames(pseudocell_mat)]
+  }
+  
 
 	# prepare peak gene key
 	gene_coords <- Signac:::CollapseToLongestTranscript(Annotation(seurat))
@@ -178,6 +188,7 @@ run_peak_aen <- function(seurat,
 #' @param globals_maxsize If running into RAM problems during multithreading, can use this parameter to set future.globals.maxSize if not done manually
 #' @param verbose Boolean to determine whether to run silently
 #' @param bs_seed Seed for reproducibility in determining bootstrap seeds, set to NULL if not needed
+#' @param peak_assay Name of ATAC assay to use for peak information, set to "peaks" by default
 #' @param multi_seed Seed for reproducibility during multithreaded model training, set to NULL if not needed
 #'
 #' @return list of lists per modeled gene, containing modeling and TF gene regulatory network information
@@ -220,8 +231,15 @@ run_tf_aen <- function(seurat,
 		modeled_genes <- gene_list
 	}
 
-	peak_tf_key <- seurat@assays$peaks@motifs@data
-	colnames(peak_tf_key) <- unlist(seurat@assays$peaks@motifs@motif.names)
+	###############
+  	# allow user defined ATAC assay name
+  	tmp_assay = seurat[[peak_assay]]
+  	peak_tf_key <- tmp_assay@motifs@data
+  	colnames(peak_tf_key) <- unlist(tmp_assay@motifs@motif.names)
+
+  	# peak_tf_key <- seurat@assays$peaks@motifs@data
+	# colnames(peak_tf_key) <- unlist(seurat@assays$peaks@motifs@motif.names)
+  ###############
 
 	regulator_tf_names <- colnames(peak_tf_key)
 	regulator_tf_names <- regulator_tf_names[which(regulator_tf_names %in% colnames(pseudocell_mat))]

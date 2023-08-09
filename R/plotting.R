@@ -391,7 +391,9 @@ plot_graph_rankings <- function(tf_results,
 #' @param two_tailed Boolean whether P value cutoff is for a two-tailed test
 #' @param top_n_to_label Number of top positive and negative TFs to label on plot if tfs_to_label is NULL
 #' @param label_tfs Boolean whether to label TFs on plot
-#' @param colors Colors for negative and positive regulatory scores
+#' @param colors A vector of two color values: color1 for ident1 / positive and color2 for ident2 / negative scores
+#' @param ident1 Label for positive scores, default H (Healthy)
+#' @param ident2 Label for negative scores, default FR (Faired-Repaired)
 #'
 #' @return ggplot of motif enrichment, fold enrichment vs -log(p-value)
 #' @export
@@ -403,7 +405,8 @@ plot_tf_rankings <- function(results_df,
 							 two_tailed = TRUE,
 							 top_n_to_label = 5,
 							 label_tfs = TRUE,
-							 colors = c("#5862AD", "#39B54A")) {
+							 colors = c("#39B54A", "#5862AD"), 
+							 ident1 = "H", ident2 = "FR") {
 	require(ggplot2)
 	require(ggrepel)
 
@@ -423,7 +426,11 @@ plot_tf_rankings <- function(results_df,
 		results_df$label[which(results_df$TF_name %in% tfs_to_label)] <- results_df$TF_name[which(results_df$TF_name %in% tfs_to_label)]
 	}
 
-	results_df$comp <- ifelse(results_df$Score > 0, "H", "FR")
+	# allow change the legend label for ident1 and ident2. 
+	results_df$comp <- ifelse(results_df$Score > 0, ident1, ident2)
+	# freeze the order of color with color 1 corresponds to ident 1, and color 2 corresponds to ident 2.
+	results_df$comp = factor(results_df$comp, levels = c(ident1, ident2))
+	
 	if (length(which(results_df$Score < 0)) == 0) {
 		colors <- colors[1]
 	}
@@ -433,7 +440,9 @@ plot_tf_rankings <- function(results_df,
 		    geom_bar(stat = "identity", color = "black", size = 0.0, width = 1, alpha = .8) + 
 		    scale_fill_manual(values = colors) +
 	    	theme_classic() + xlab("TF") + ylab("Predicted regulatory influence") +
-		    geom_text_repel(aes(label = label), max.overlaps = 100, size = 5) + 
+		    # geom_text_repel(aes(label = label), max.overlaps = 100, size = 5) + 
+	      geom_text_repel(aes(label = label), max.overlaps = 100, size = 5, xlim = c(-Inf, Inf)) + 
+	      coord_cartesian(clip = "off") +   ## to allow labels exceed the x axis boundary in case multiple labels are mixed up 
 		    theme(text = element_text(size = 14), axis.text = element_text(size = 14))
 	return(g)
 }
