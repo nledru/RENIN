@@ -391,9 +391,9 @@ plot_graph_rankings <- function(tf_results,
 #' @param two_tailed Boolean whether P value cutoff is for a two-tailed test
 #' @param top_n_to_label Number of top positive and negative TFs to label on plot if tfs_to_label is NULL
 #' @param label_tfs Boolean whether to label TFs on plot
-#' @param colors A vector of two color values: color1 for positive and color2 for negative scores
-#' @param ident1 Label for positive scores, default FR
-#' @param ident2 Label for negative scores, default H
+#' @param colors A vector of two color values: color1 for ident1 / positive and color2 for ident2 / negative scores
+#' @param ident1 Label for positive scores, default H (Healthy)
+#' @param ident2 Label for negative scores, default FR (Faired-Repaired)
 #'
 #' @return ggplot of motif enrichment, fold enrichment vs -log(p-value)
 #' @export
