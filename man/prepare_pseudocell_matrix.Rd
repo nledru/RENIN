@@ -12,7 +12,10 @@ prepare_pseudocell_matrix(
   find_neighbors = FALSE,
   reduction1 = "harmony",
   reduction2 = "harmony_peaks",
-  dim_list = list(1:50, 1:50),
+  non_multiome = FALSE,
+  umap_name = "WNN.UMAP",
+  neighbor_name = "weighted.nn",
+  dims = list(1:50, 1:50),
   k.nn = 5,
   seed = 489284
 )
@@ -32,11 +35,11 @@ prepare_pseudocell_matrix(
 
 \item{reduction2}{Reduction 2 to use for FindMultiModalNeighbors, if find_neighbors is TRUE}
 
-\item{dim_list}{List of dimensions to use for FindMultiModalNeighbors, if find_neighbors is TRUE}
-
 \item{k.nn}{Number of nearest neighbors to use for KNN algorithm, if find_neighbors is TRUE}
 
 \item{seed}{Seed for reproducibility, set to NULL if not needed}
+
+\item{dim_list}{List of dimensions to use for FindMultiModalNeighbors, if find_neighbors is TRUE}
 }
 \value{
 Pseudocell expression/accessibility as a data frame

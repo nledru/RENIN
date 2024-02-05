@@ -279,6 +279,9 @@ plot_footprinting <- function(object,
 #'
 #' @param tf_results List output returned by run_tf_aen with trained model information
 #' @param regulator_tf_names List of TFs with motif and expression information in dataset
+#' @param seurat Seurat object used for modeling
+#' @param expr_assay Expression assay used for modeling
+#' @param expr_slot Expression slot used for modeling
 #' @param top_n_graph Number of most central TFs to plot on gene regulatory network graph plots
 #' @param top_n_ranking Number of most central TFs to plot on ranking plots
 #' @param layout_algorithm Algorithm used to construct gene regulatory network graphs. Options are star, circle, gem, dh, graphopt, grid, mds, randomly, fr, drl, lgl, and kk
@@ -290,6 +293,8 @@ plot_footprinting <- function(object,
 plot_graph_rankings <- function(tf_results,
                                 regulator_tf_names,
                                 seurat,
+                                expr_assay = "SCT",
+                                expr_slot = "data",
                                 top_n_graph = 20, # >20 can be a little too cluttered, so split this out
                                 top_n_ranking = 25,
                                 layout_algorithm = "kk",
@@ -303,7 +308,7 @@ plot_graph_rankings <- function(tf_results,
 		regulator_tf_names <- regulator_tf_names[which(regulator_tf_names != "(Intercept)")]
 	}
 
-	mean_expr <- Matrix::rowSums(GetAssayData(seurat, assay = "SCT", slot = "data")) / dim(seurat)[2]
+	mean_expr <- Matrix::rowSums(GetAssayData(seurat, assay = expr_assay, slot = expr_slot)) / dim(seurat)[2]
 
 	edge_df <- lapply(tf_results, function(x) {
 	                    coef_df <- x[[4]]
@@ -386,6 +391,8 @@ plot_graph_rankings <- function(tf_results,
 #'
 #' @param results_df Data frame output of rank_tfs, with regulatory score and standard error for each TF
 #' @param tfs_to_label Names of TFs to label on plot
+#' @param label_1 Name of postive score TFs in plot legend
+#' @param label_2 Name of negative score TFs in plot legend
 #' @param p_value_cutoff P value cutoff below which TFs are removed from plot. Set to 1 to exclude no TFs
 #' @param score_cutoff Cutoff for absolute value of regulatory score below which TFs are removed from plot. Set to 0 to exclude no TFs
 #' @param two_tailed Boolean whether P value cutoff is for a two-tailed test
@@ -398,6 +405,8 @@ plot_graph_rankings <- function(tf_results,
 #'
 plot_tf_rankings <- function(results_df,
 							 tfs_to_label = NULL,
+                             label_1 = "H",
+                             label_2 = "FR",
 							 p_value_cutoff = 0.05,
 							 score_cutoff = 0.1,
 							 two_tailed = TRUE,
@@ -423,7 +432,7 @@ plot_tf_rankings <- function(results_df,
 		results_df$label[which(results_df$TF_name %in% tfs_to_label)] <- results_df$TF_name[which(results_df$TF_name %in% tfs_to_label)]
 	}
 
-	results_df$comp <- ifelse(results_df$Score > 0, "H", "FR")
+	results_df$comp <- ifelse(results_df$Score > 0, label_1, label_2)
 	if (length(which(results_df$Score < 0)) == 0) {
 		colors <- colors[1]
 	}

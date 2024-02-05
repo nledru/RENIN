@@ -8,6 +8,8 @@ plot_graph_rankings(
   tf_results,
   regulator_tf_names,
   seurat,
+  expr_assay = "SCT",
+  expr_slot = "data",
   top_n_graph = 20,
   top_n_ranking = 25,
   layout_algorithm = "kk",
@@ -18,6 +20,12 @@ plot_graph_rankings(
 \item{tf_results}{List output returned by run_tf_aen with trained model information}
 
 \item{regulator_tf_names}{List of TFs with motif and expression information in dataset}
+
+\item{seurat}{Seurat object used for modeling}
+
+\item{expr_assay}{Expression assay used for modeling}
+
+\item{expr_slot}{Expression slot used for modeling}
 
 \item{top_n_graph}{Number of most central TFs to plot on gene regulatory network graph plots}
 

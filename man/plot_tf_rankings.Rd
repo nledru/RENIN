@@ -7,18 +7,24 @@
 plot_tf_rankings(
   results_df,
   tfs_to_label = NULL,
+  label_1 = "H",
+  label_2 = "FR",
   p_value_cutoff = 0.05,
   score_cutoff = 0.1,
   two_tailed = TRUE,
   top_n_to_label = 5,
   label_tfs = TRUE,
-  colors = c("5862AD", "#39B54A")
+  colors = c("#5862AD", "#39B54A")
 )
 }
 \arguments{
 \item{results_df}{Data frame output of rank_tfs, with regulatory score and standard error for each TF}
 
 \item{tfs_to_label}{Names of TFs to label on plot}
+
+\item{label_1}{Name of postive score TFs in plot legend}
+
+\item{label_2}{Name of negative score TFs in plot legend}
 
 \item{p_value_cutoff}{P value cutoff below which TFs are removed from plot. Set to 1 to exclude no TFs}
 

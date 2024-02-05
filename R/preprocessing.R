@@ -99,7 +99,10 @@ prepare_pseudocell_matrix <- function(seurat,
                                       find_neighbors = FALSE,
                                       reduction1 = "harmony",
                                       reduction2 = "harmony_peaks",
-                                      dim_list = list(1:50, 1:50),
+                                      non_multiome = FALSE,
+                                      umap_name = "WNN.UMAP",
+                                      neighbor_name = "weighted.nn",
+                                      dims = list(1:50, 1:50),
                                       k.nn = 5,
                                       seed = 489284) {
 	require(Seurat)
@@ -108,12 +111,45 @@ prepare_pseudocell_matrix <- function(seurat,
 	require(Matrix)
 
 	if (!is.null(seed)) set.seed(seed)
+
+	if (is.null(reduction2) && non_multiome) {
+		require(VISION)
+		data <- GetAssayData(seurat, slot = slot, assay = assay)
+		mpools <- applyMicroClustering(data, cellsPerPartition = cells_per_partition) # from VISION
+
+		mpool_column <- vector("numeric", dim(seurat)[2])
+		names(mpool_column) <- colnames(seurat)
+		for (i in 1:length(mpools)) {
+		    mpool_column[mpools[[i]]] <- rep(i, length(mpools[[i]]))
+		}
+		seurat <- AddMetaData(seurat, metadata = as.data.frame(mpool_column))
+
+		pseudocell_matrix <- as_tibble(t(sapply(mpools,
+		                                        function(x) {
+		                                                    if (length(x) > 1) {
+		                                                        rowSums(data[, x]) / length(x);
+		                                                    } else {
+		                                                        data[, x]
+		                                                    }
+		                                                }, 
+		                                        simplify = TRUE)),
+		                               rownames = "pseudocell_IDs")
+		pseudocell_mat <- pseudocell_matrix %>% dplyr::select(-pseudocell_IDs) %>% base::as.data.frame()
+
+		return(pseudocell_mat)
+	}
+
+
+
 	pools <- apply_multi_micro_clustering(seurat,
 										  cells_per_partition,
 										  find_neighbors,
 										  reduction1,
 										  reduction2,
-										  dim_list,
+										  umap_name,
+										  assay,
+										  neighbor_name,
+										  dims,
 										  k.nn)
 	pool_column <- vector("numeric", dim(seurat)[2])
 	names(pool_column) <- colnames(seurat)
@@ -169,22 +205,31 @@ apply_multi_micro_clustering <- function(seurat,
                                          find_neighbors = FALSE,
                                          reduction1 = "harmony",
                                          reduction2 = "harmony_peaks",
-                                         dim_list = list(1:50, 1:50),
+                                         umap_name = "WNN.UMAP",
+                                         assay_name = "SCT",
+                                         neighbor_name = "weighted.nn",
+                                         dims = list(1:50, 1:50),
                                          k.nn = 5) {
 	require(Seurat)
 	require(SeuratWrappers)
 	require(VISION)
 	require(SingleCellExperiment)
 
-	if (find_neighbors || is.null(seurat@neighbors$weighted.nn)) {
-		seurat <- FindMultiModalNeighbors(seurat, reduction.list = list(reduction1, reduction2),
-										  k.nn = k.nn, dims.list = dim_list)
+	if (find_neighbors || is.null(neighbor_name) || is.null(seurat@neighbors[[neighbor_name]])) {
+		if (is.null(reduction2)) {
+			seurat <- FindNeighbors(seurat, dims = dims, reduction = reduction1, return.neighbor = TRUE, k.param = k.nn)
+		} else {
+			seurat <- FindMultiModalNeighbors(seurat, reduction.list = list(reduction1, reduction2), k.nn = k.nn, dims.list = dims)
+		}
+		neighbor_name <- names(seurat@neighbors)[1]
 	}
-	seurat.cds <- as.cell_data_set(seurat, assay = "SCT")
-	res <- reducedDim(seurat.cds, type = "WNN.UMAP", withDimnames = TRUE)
+
+	kn <- list(seurat@neighbors[[neighbor_name]]@nn.idx, seurat@neighbors[[neighbor_name]]@nn.dist)
+
+	seurat.cds <- as.cell_data_set(seurat, assay = assay_name)
+	res <- reducedDim(seurat.cds, type = umap_name, withDimnames = TRUE)
 
     message("Performing initial coarse-clustering...")
-    kn <- list(seurat@neighbors$weighted.nn@nn.idx, seurat@neighbors$weighted.nn@nn.dist)
     cl <- VISION:::louvainCluster(kn, res)
 
     message("Further partitioning coarse clusters...")

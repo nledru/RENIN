@@ -6,9 +6,9 @@
 \usage{
 rank_tfs(
   tf_results,
-  negative_genes,
-  regulator_tf_names,
   seurat,
+  negative_genes = c(),
+  regulator_tf_names = NULL,
   weight_by_expr = TRUE,
   expr_assay = "SCT",
   slot = "data",
@@ -18,11 +18,11 @@ rank_tfs(
 \arguments{
 \item{tf_results}{List output returned by run_tf_aen with trained model information}
 
+\item{seurat}{A Seurat object}
+
 \item{negative_genes}{Genes to weight negatively if trying to associate TFs with one of two sides in a trajectory/lineage}
 
 \item{regulator_tf_names}{List of TFs with motif and expression information in dataset}
-
-\item{seurat}{A Seurat object}
 
 \item{weight_by_expr}{Boolean to multiply estimated regulatory coefficients by mean TF expression}
 
